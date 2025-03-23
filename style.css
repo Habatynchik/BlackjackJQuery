@@ -1,0 +1,53 @@
+.card {
+    width: 189px;
+    height: 267px;
+
+    border: 1px solid black;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 5px;
+    margin: 10px;
+    
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card.black {
+    color: black;
+}
+
+.card.red {
+    color: red;
+}
+
+.card .top {
+    align-self: flex-end;
+    text-align: center;
+}
+
+.card .middle {
+    align-self: center;
+    font-size: 72px;
+}
+
+.card .bottom {
+    transform: rotateX(180deg);
+    text-align: center;
+    width: min-content;
+}
+
+
+.table {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card.back {
+    background-image: url('https://preview.redd.it/look-for-opinions-on-my-2-playing-card-back-designs-look-to-v0-629gsxh6j5fc1.png?width=816&format=png&auto=webp&s=edccb03d7c2128ae3302af3305b7b71a8465105f');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 128% 115%;    
+}
