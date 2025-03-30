@@ -51,3 +51,10 @@
     background-repeat: no-repeat;
     background-size: 128% 115%;    
 }
+
+.deck {
+    position: relative;
+}
+.deck .card {
+    position: absolute;
+}
