@@ -419,14 +419,71 @@ $(document).ready(function () {
     ];
 
     let playerHand = [];
+    let croupierHand = [];
 
-    $('.start').click(function (e) { 
-        $('.shuffle').click();
+    $(".start").click(function (e) {
+        $(".shuffle").click();
         $(this).hide();
-        $('.take').show();
-        $('.stop').show();
-        $('.take').click();
-        $('.take').click();
+        $(".take").show();
+        $(".stop").show();
+        $(".take").click();
+        $(".take").click();
+
+        let firstCard = deck.pop();
+        let secondCard = deck.pop();
+        secondCard.isFlipped = true;
+        croupierHand.push(firstCard);
+        croupierHand.push(secondCard);
+        drawDealerHand();
+    });
+
+    function drawDealerHand() {
+        $(".croupierTable").html("");
+        croupierHand.forEach((card) => {
+            card = generateCard(card);
+            $(".croupierTable").append(card);
+        });
+    }
+
+    function calculateHand(array = []) {
+        let sum = 0;
+        array
+            .filter((card) => card.value != "ace")
+            .forEach(card => {
+                sum += card.price
+            });
+        array
+            .filter((card) => card.value == "ace")
+            .forEach(card => {
+                if (sum <= 10) {
+                    sum += 11;
+                } else {
+                    sum += 1;
+                }
+            })
+        return sum
+    }
+
+
+    $(".stop").click(function (e) { 
+        let dealerScore = calculateHand(croupierHand);
+        let playerScore = calculateHand(playerHand);
+
+        if (playerScore > 21 || dealerScore > playerHand) {
+            alert("Dealer win");
+        } else if (playerScore > dealerScore) {
+            alert("Player win")
+        } else {
+            alert("Draw")
+        }
+        setTimeout(() => {
+            document.location.reload()
+        }, 2000)
+    });
+
+    $("*").click(function (e) { 
+        let score = calculateHand(playerHand)
+        $(".score").html(score);
     });
 
     $(".take").click(function (e) {
@@ -491,7 +548,7 @@ $(document).ready(function () {
         return $(element);
     }
 
-    $(".table").on("mousemove", ".card", function (event) {
+    $(".table, .croupierTable").on("mousemove", ".card", function (event) {
         let card = $(this);
         let rect = card[0].getBoundingClientRect();
         let cardCenterX = rect.left + rect.width / 2;
@@ -510,7 +567,7 @@ $(document).ready(function () {
         });
     });
 
-    $(".table").on("mouseleave", ".card", function () {
+    $(".table, .croupierTable").on("mouseleave", ".card", function () {
         $(this).css({
             transform: `rotateY(0deg) rotateX(0deg) translateY(0px)`,
             "box-shadow": `0px 0px 0px rgba(0,0,0,0)`,
