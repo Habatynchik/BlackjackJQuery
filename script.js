@@ -420,6 +420,15 @@ $(document).ready(function () {
 
     let playerHand = [];
 
+    $('.start').click(function (e) { 
+        $('.shuffle').click();
+        $(this).hide();
+        $('.take').show();
+        $('.stop').show();
+        $('.take').click();
+        $('.take').click();
+    });
+
     $(".take").click(function (e) {
         $(".deck").children().last().remove();
         let lastCard = deck.pop();
