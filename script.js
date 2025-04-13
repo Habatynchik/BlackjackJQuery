@@ -466,24 +466,60 @@ $(document).ready(function () {
 
 
     $(".stop").click(function (e) { 
+        croupierHand[0].isFlipped = true;
+        drawDealerHand();
+
+        let end = setInterval(() => {
+            dealerTake();
+            if (playerHand.length == 0) {
+                clearInterval(end);
+            }
+        }, 1000);
+    });
+
+    function dealerTake() {
         let dealerScore = calculateHand(croupierHand);
         let playerScore = calculateHand(playerHand);
 
-        if (playerScore > 21 || dealerScore > playerHand) {
-            alert("Dealer win");
-        } else if (playerScore > dealerScore) {
-            alert("Player win")
+        let nextCard = deck[deck.length - 1];
+        console.log(nextCard)
+        if (dealerScore + nextCard.price <= 21 
+            || (dealerScore + nextCard > 21 
+                && dealerScore < playerScore)
+        ) {
+            let card = deck.pop()
+            card.isFlipped = true
+            croupierHand.push(card);
+            $(".dealerScore").html(calculateHand(croupierHand));
+            drawDealerHand();
         } else {
-            alert("Draw")
+            if (playerScore > 21 || dealerScore > playerScore) {
+                alert("Dealer win");
+            } else if (playerScore > dealerScore) {
+                alert("Player win")
+            } else {
+                alert("Draw")
+            }
+            $('.start, .stop, .take').toggle();
+            $('.table, .croupierTable').html("");
+            $(".take").attr('disabled', false);
+            $(".score, .dealerScore").html("");
+            croupierHand = []
+            playerHand = []
         }
-        setTimeout(() => {
-            document.location.reload()
-        }, 2000)
-    });
+    }
 
     $("*").click(function (e) { 
         let score = calculateHand(playerHand)
-        $(".score").html(score);
+        let dealerScore = calculateHand(croupierHand.filter(card => card.isFlipped))
+
+        if (score > 21) {
+            $('.take').attr('disabled', true);
+        }
+        if (score != 0) {
+            $(".score").html(score);
+            $(".dealerScore").html(dealerScore);
+        }
     });
 
     $(".take").click(function (e) {
